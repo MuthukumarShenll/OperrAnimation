@@ -8,8 +8,7 @@
 
 import UIKit
 
-class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate , UIViewControllerAnimatedTransitioning,UIViewControllerTransitioningDelegate {
-    
+class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate , UIViewControllerAnimatedTransitioning , UIViewControllerTransitioningDelegate {
     
     //MARK: - UITableView declaration
     @IBOutlet weak var animationImageTable: UITableView!
@@ -43,7 +42,7 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
