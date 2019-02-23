@@ -14,12 +14,6 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
     //MARK: - UITableView declaration
     @IBOutlet weak var animationImageTable: UITableView!
     
-    //MARK: - UIImageView declaration
-    @IBOutlet weak var animationImage: UIImageView!
-    
-    //MARK: - UIView declaration
-    @IBOutlet weak var imageContainerView: UIView!
-    
     //MARK: - UIButton declaration
     @IBOutlet weak var closeButton: UIButton!
     
@@ -36,8 +30,6 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.imageContainerView.isHidden = true
-        self.imageContainerView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +43,7 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

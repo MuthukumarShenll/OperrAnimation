@@ -115,7 +115,6 @@
                     </view>
                     <connections>
                         <outlet property="animationImageTable" destination="uAS-cU-dIb" id="eBi-b1-ZDn"/>
-                        <segue destination="ZoV-ux-JIa" kind="presentation" identifier="animateViewSegue" id="oBP-GX-vEe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -184,7 +183,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZVP-iV-424" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="878" y="34"/>
+            <point key="canvasLocation" x="743" y="34"/>
         </scene>
     </scenes>
     <resources>
