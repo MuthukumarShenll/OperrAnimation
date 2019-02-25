@@ -14,7 +14,4 @@ class DateTVCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var dayLabel: UILabel!
 
-    //MARK: - UIImageView declaration
-    @IBOutlet weak var userImage: UIImageView!
-
 }
