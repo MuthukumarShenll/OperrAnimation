@@ -8,7 +8,8 @@
 
 import UIKit
 
-class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate , UIViewControllerAnimatedTransitioning , UIViewControllerTransitioningDelegate {
+class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate , UIViewControllerAnimatedTransitioning ,
+UIViewControllerTransitioningDelegate {
     
     //MARK: - UITableView declaration
     @IBOutlet weak var animationImageTable: UITableView!
@@ -58,6 +59,7 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.animationImage.image = UIImage(named:(indexPath.row as NSNumber).stringValue)
             cell.imageContainerView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             
+            // While long press the particular cell longPressGestureRecognizerHandler(_:) action will be initiated..
             let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressGestureRecognizerHandler(_:)))
             longPressGesture.minimumPressDuration = 1.0
             cell.animationImage.addGestureRecognizer(longPressGesture)
@@ -73,12 +75,15 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
             appDelegate.selectedImage = indexPath.row as NSNumber
             let cell = tableView.cellForRow(at: indexPath) as! ImageViewTVCell
             
+            // This function will zoom-in the image with animation. Duration is mentioned for how much time animation should be appear..
             UIView.animate(withDuration: 0.3, animations: {
                 cell.imageContainerView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
                 self.view.layoutIfNeeded()
             }, completion: { (Success) in
+                // once the zoom-in animation is completed , this function will zoom-out the image with animation. Duration is mentioned for how much time animation should be appear.
                 UIView.animate(withDuration: 0.5, animations: {
                     cell.imageContainerView.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+                // Before complete the the zoom-out animation, will appear next viewcontroller for a animation continuity..
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                         self.moveToNextVC()
                     })
@@ -88,6 +93,8 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.view.layoutIfNeeded()
     }
     
+    // This function will move to next viewcontroller.
+
     func  moveToNextVC(){
         let animateFullViewController = self.storyboard!.instantiateViewController(withIdentifier: "AnimateFullViewController") as! AnimateFullViewController
         animateFullViewController.selectedImage = self.selectedImageRow
@@ -104,6 +111,8 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     // MARK: - Get Current Date
+
+    // This function will return the current date like mentioned in video you were given (EX : TUESDAY , APRIL 3)..
 
     func getCurrentDate()->String{
         var strDayAndDate = String()
@@ -131,26 +140,30 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // MARK: - UIViewControllerAnimatedTransitioning Delegate
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        // The value here should be the duration of the animations scheduled in the animationTransition method
+        // The value here should be the duration of the animations scheduled in the animationTransition method..
         return 4.0
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
         guard let toViewController = transitionContext.viewController(forKey: .to),
-            let fromViewController = transitionContext.viewController(forKey: .from) else {
+            let _ = transitionContext.viewController(forKey: .from) else {
                 return
         }
         
-        if (isPresenting) {
+        // isPresenting value is true , animation will be start present how the next viewcontroller to be..
+        // isPresenting value is false , previous viewcontroller will appear with zoom-out to zoom-in animation..
+        if(isPresenting){
             containerView.addSubview(toViewController.view)
             toViewController.view.alpha = 0
+            toViewController.view.transform = CGAffineTransform(scaleX: 0.80, y: 0.80)
             UIView.animate(withDuration: 0.4, animations: {
                 toViewController.view.alpha = 1
+                toViewController.view.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             }, completion: { _ in
                 transitionContext.completeTransition(true)
             })
-        } else {
+        }else{
             UIView.animate(withDuration: 0.5, animations: {
                 transitionContext.completeTransition(true)
             }, completion: { _ in
@@ -172,6 +185,7 @@ class ImageViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let cell = self.animationImageTable.cellForRow(at: indexPath!) as! ImageViewTVCell
         
+        // Same animation function appeared like table didSelect
         UIView.animate(withDuration: 0.3, animations: {
             cell.imageContainerView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
             self.view.layoutIfNeeded()

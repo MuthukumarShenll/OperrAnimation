@@ -29,6 +29,7 @@ class AnimateFullViewController: UIViewController {
     //MARK: - UIView Delegates
     override func viewDidLoad() {
         super.viewDidLoad()
+        // While swipe down the view UIPanGestureRecognizer action will be initiated..
         self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(AnimateFullViewController.draggedView(_:)))
         self.imageContainerView.addGestureRecognizer(self.panGesture)
     }
@@ -41,20 +42,26 @@ class AnimateFullViewController: UIViewController {
     //MARK: - UIPanGestureRecognizer function
 
     @objc func draggedView(_ sender:UIPanGestureRecognizer){
+        
         var translation = sender.translation(in: self.imageContainerView)
-        if(translation.x < 0 || translation.x > 0){
-            translation.x = 0
-        }
+        
+        // condition will not allow swipe to top..
+
         if(translation.y < 0 && self.imageContainerView.frame.origin.y < 0){
             translation.y = 0
         }else{
+            
+            // condition will enter swipe to down..
+
             self.imageContainerView.center = CGPoint(x: self.imageContainerView.center.x, y: self.imageContainerView.center.y + translation.y)
             sender.setTranslation(CGPoint.zero, in: self.view)
             
+            // condition will enter when continously swipe down the view..
             if sender.state == UIGestureRecognizerState.changed {
+                
                 self.imageContainerView.layer.masksToBounds = true
-                if(self.imageContainerView.layer.cornerRadius > 30){
-                    self.imageContainerView.layer.cornerRadius = 30
+                if(self.imageContainerView.layer.cornerRadius >= 25){
+                    self.imageContainerView.layer.cornerRadius = 25
                 }else{
                     self.imageContainerView.layer.cornerRadius = (self.imageContainerView.frame.origin.y/3)
                 }
@@ -65,11 +72,14 @@ class AnimateFullViewController: UIViewController {
                     self.actionClose()
                 }
             }
+            
+            // condition will enter when the swipe is end..
+
             if sender.state == UIGestureRecognizerState.ended {
                 if(self.imageContainerView.frame.origin.y >= 50){
-                    self.imageContainerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width,height: self.view.frame.height)
                     self.moveToPreviousVC()
                 }else{
+                    // condition will enter when the swipe is not reached a certain level to close the view, get back to default position..
                     self.imageContainerView.layer.cornerRadius = 0
                     self.imageContainerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
                     sender.setTranslation(CGPoint.zero, in: self.view)
@@ -80,15 +90,17 @@ class AnimateFullViewController: UIViewController {
     }
 
     @IBAction func actionClose() {
-        UIView.animate(withDuration: 1.0, animations: {
+        // Before dismissing the view , made animation for previous view animation continuity.
+        UIView.animate(withDuration: 0.5, animations: {
             self.imageContainerView.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
             self.imageContainerView.layoutIfNeeded()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                 self.moveToPreviousVC()
             })
         })
     }
     
+    // Get back to the previous viewController..
     func  moveToPreviousVC(){
         self.dismiss(animated: true, completion: nil)
     }
